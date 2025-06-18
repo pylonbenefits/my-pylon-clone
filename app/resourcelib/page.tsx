@@ -40,10 +40,6 @@ const blogPosts = [
 ];
 
 export default function ResourceLibraryPage() {
-  const handleLogout = () => {
-    console.log("Logout clicked");
-  };
-
   const [loan, setLoan] = useState(400000);
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
