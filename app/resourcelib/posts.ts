@@ -1,4 +1,4 @@
-export const blogPosts = [
+export const blogPosts2 = [
   {
     slug: "fixed-vs-adjustable",
     title: "Understanding Fixed vs. Adjustable Rate Mortgages",

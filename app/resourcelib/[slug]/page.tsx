@@ -1,26 +1,25 @@
-// app/resourcelib/[slug]/page.tsx
-
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { blogPosts } from "../posts";
+import { blogPosts2 } from "../posts";
 import Sidebar from "@/components/Sidebar";
 import UserDropdown from "@/components/UserDropdown";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/authOptions"; // make sure this file exports properly
 
-interface PageProps {
-  params: { slug: string }; // ✅ CORRECT
+export interface PageProps {
+  params: Promise<{ slug: string }>; // change here to Promise
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params; // await params here
+
   const session = await getServerSession(authOptions);
 
   if (!session) {
     redirect("/");
   }
 
-  const user = session.user;
-  const post = blogPosts.find((p) => p.slug === params.slug);
+  const post = blogPosts2.find((p) => p.slug === slug);
 
   if (!post) {
     notFound();
