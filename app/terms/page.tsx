@@ -318,7 +318,7 @@ const TermsofService = () => {
   11. Modifications to the Terms
 </h2>
 <p style={{ marginBottom: "2rem", whiteSpace: "pre-line" }}>
-  Pylon reserves the right to update or modify this Agreement at any time, without prior notice. If we make material changes, we will update the "last modified" date at the top of this page, and you waive any right to receive specific notice of each such material change. Pylon will determine what constitutes a material change. Your continued use of the Service after any changes take effect constitutes your acceptance of the revised Agreement. If you do not agree to the updated terms, you must stop using the Service. We encourage you to review these Terms regularly.
+  Pylon reserves the right to update or modify this Agreement at any time, without prior notice. If we make material changes, we will update the &quot;last modified&quot; date at the top of this page, and you waive any right to receive specific notice of each such material change. Pylon will determine what constitutes a material change. Your continued use of the Service after any changes take effect constitutes your acceptance of the revised Agreement. If you do not agree to the updated terms, you must stop using the Service. We encourage you to review these Terms regularly.
 </p>
 
 

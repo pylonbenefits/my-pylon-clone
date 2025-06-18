@@ -5,11 +5,10 @@ import Image from "next/image";
 
 const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
-    role: "employee",
+    account: "employee", // default account type, corresponds to role
   });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -19,8 +18,8 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, role: e.target.value }));
+  const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, account: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,11 +42,10 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
       } else {
         setSuccessMsg("Signup successful! Please log in.");
         setFormData({
-          firstName: "",
-          lastName: "",
+          name: "",
           email: "",
           password: "",
-          role: "employee",
+          account: "employee",
         });
       }
     } catch (error) {
@@ -78,20 +76,10 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            name="firstName"
-            placeholder="First Name"
+            name="name"
+            placeholder="Full Name"
             className="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-600"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            className="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-600"
-            value={formData.lastName}
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -122,30 +110,30 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
-                  name="role"
+                  name="account"
                   value="mortgage_lender"
-                  checked={formData.role === "mortgage_lender"}
-                  onChange={handleRoleChange}
+                  checked={formData.account === "mortgage_lender"}
+                  onChange={handleAccountChange}
                 />
                 <span>Mortgage Lending Partner</span>
               </label>
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
-                  name="role"
+                  name="account"
                   value="employer"
-                  checked={formData.role === "employer"}
-                  onChange={handleRoleChange}
+                  checked={formData.account === "employer"}
+                  onChange={handleAccountChange}
                 />
                 <span>Employer</span>
               </label>
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
-                  name="role"
+                  name="account"
                   value="employee"
-                  checked={formData.role === "employee"}
-                  onChange={handleRoleChange}
+                  checked={formData.account === "employee"}
+                  onChange={handleAccountChange}
                 />
                 <span>Employee</span>
               </label>
@@ -165,7 +153,7 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-700">
-          Already a member?{' '}
+          Already a member?{" "}
           <button
             type="button"
             onClick={onOpenLogin}

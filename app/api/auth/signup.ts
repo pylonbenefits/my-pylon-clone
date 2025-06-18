@@ -1,42 +1,44 @@
-// pages/api/signup.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') return res.status(405).end();
+  if (req.method !== "POST") return res.status(405).end();
 
-  const { firstName, lastName, email, password, role } = req.body;
+  const { name, email, password, account } = req.body;
 
-  if (!email || !password || !firstName || !lastName || !role) {
-    return res.status(400).json({ message: 'Missing required fields' });
+  if (!email || !password || !account) {
+    return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
+
     if (existingUser) {
-      return res.status(409).json({ message: 'Email already in use' });
+      return res.status(409).json({ message: "Email already in use" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Prisma expects `name` to be string or null since it is nullable
+    // Ensure to pass null explicitly if empty string
+
     const user = await prisma.user.create({
       data: {
-        firstName,
-        lastName,
+        name: name?.trim() === "" ? null : name,
         email,
         password: hashedPassword,
-        role,
+        account,
       },
     });
 
-    return res.status(201).json({ message: 'User created', userId: user.id });
+    return res.status(201).json({ message: "User created", userId: user.id });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
+  } finally {
+    await prisma.$disconnect();
   }
 }

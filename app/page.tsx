@@ -4,7 +4,6 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 
 import Link from "next/link";
-import LoginModal from "@/app/LoginModal";
 
 export default function Home() {
   return (
