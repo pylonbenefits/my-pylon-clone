@@ -103,8 +103,12 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
         {/* Google Sign In Button */}
         <div className="mt-4">
           <button
-            type="button"
-            onClick={() => signIn("google")}
+              type="button"
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/logindashboard",
+                })
+              }
             className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded py-3 hover:bg-gray-100 transition"
           >
             <svg
