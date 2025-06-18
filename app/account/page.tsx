@@ -12,10 +12,11 @@ export default async function AccountPageWrapper() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/");
   }
 
-  return <AccountPage user={session.user} />;
+  return <AccountPage user={{ name: session.user?.name ?? "", email: session.user?.email ?? "" }} />;
+
 }
 
 interface AccountPageProps {
@@ -69,11 +70,11 @@ function AccountPage({ user }: AccountPageProps) {
         setNewPassword("");
         setConfirmPassword("");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+
+ } catch (err) {
+  console.error("Update error:", err);
+  setError("An error occurred. Please try again.");
+}
   };
 
   return (
