@@ -4,10 +4,12 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import { compare } from "bcryptjs";
 
-// Avoid creating multiple PrismaClient instances in dev
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+// Optionally specify runtime (Node.js because Prisma needs node environment)
+export const runtime = "nodejs";
 
 const handler = NextAuth({
   session: {
@@ -15,8 +17,8 @@ const handler = NextAuth({
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -41,7 +43,6 @@ const handler = NextAuth({
             };
           }
         }
-
         return null;
       },
     }),
