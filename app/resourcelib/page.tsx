@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Header from "@/components/DashHeader";
+import Sidebar from "@/components/Sidebar"; // adjust the path as needed
 import Link from "next/link";
+import Image from "next/image";
+import { Menu } from "lucide-react";
 
 const blogPosts = [
   {
@@ -39,11 +41,9 @@ const blogPosts = [
 
 export default function ResourceLibraryPage() {
   const handleLogout = () => {
-    // Replace with logout logic
     console.log("Logout clicked");
   };
 
-  // Mortgage calculator state
   const [loan, setLoan] = useState(400000);
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
@@ -67,98 +67,109 @@ export default function ResourceLibraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-prompt">
-      <Header onLogout={handleLogout} />
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50 font-prompt">
+      {/* Sidebar */}
+      <Sidebar />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="mb-6">
-          <Link
-            href="/logindashboard"
-            className="text-sm text-orange-600 hover:underline"
-          >
-            ← Back to Dashboard
-          </Link>
-        </div>
-
-        <h1 className="text-3xl font-semibold text-gray-800 mb-8">
-          Resource Library
-        </h1>
-
-        <div className="grid gap-6 md:grid-cols-2 mb-12">
-          {blogPosts.map((post) => (
-            <div key={post.slug} className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-xl font-semibold text-orange-600 mb-2">
-                {post.title}
-              </h2>
-              <p className="text-sm text-gray-700 mb-4">{post.description}</p>
-              <Link
-                href={`/resources/${post.slug}`}
-                className="text-sm text-orange-600 hover:underline"
-              >
-                Read More →
-              </Link>
-            </div>
-          ))}
-        </div>
-
-        {/* Mortgage Calculator */}
-        <section className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Mortgage Calculator
-          </h2>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl"
-          >
-            <label className="text-sm text-gray-700">
-              Loan Amount ($)
-              <input
-                type="number"
-                value={loan}
-                onChange={(e) => setLoan(Number(e.target.value))}
-                className="mt-1 w-full border rounded px-3 py-2"
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        <main className="flex-1 p-6">
+          {/* Mobile Header */}
+          <header className="flex items-center justify-between mb-8 md:hidden">
+            <Link href="/">
+              <Image
+                src="/pylontextlogo.png"
+                alt="Pylon Logo"
+                width={140}
+                height={36}
+                priority
               />
-            </label>
-
-            <label className="text-sm text-gray-700">
-              Interest Rate (%)
-              <input
-                type="number"
-                step="0.01"
-                value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="mt-1 w-full border rounded px-3 py-2"
-              />
-            </label>
-
-            <label className="text-sm text-gray-700">
-              Loan Term (Years)
-              <input
-                type="number"
-                value={term}
-                onChange={(e) => setTerm(Number(e.target.value))}
-                className="mt-1 w-full border rounded px-3 py-2"
-              />
-            </label>
-          </form>
-
-          <div className="mt-4">
-            <button
-              onClick={calculateMortgage}
-              className="bg-orange-600 text-white px-5 py-2 rounded hover:bg-orange-700"
-            >
-              Calculate
+            </Link>
+            <button>
+              <Menu size={24} />
             </button>
+          </header>
+
+          <h1 className="text-3xl font-semibold text-gray-800 mb-8">
+            Resource Library
+          </h1>
+
+          <div className="grid gap-6 md:grid-cols-2 mb-12">
+            {blogPosts.map((post) => (
+              <div key={post.slug} className="bg-white p-6 rounded-lg shadow">
+                <h2 className="text-xl font-semibold text-orange-600 mb-2">
+                  {post.title}
+                </h2>
+                <p className="text-sm text-gray-700 mb-4">{post.description}</p>
+                <Link
+                  href={`/resourcelib/${post.slug}`}
+                  className="text-sm text-orange-600 hover:underline"
+                >
+                  Read More →
+                </Link>
+              </div>
+            ))}
           </div>
 
-          {payment !== null && (
-            <div className="mt-4 text-sm text-gray-800">
-              Estimated Monthly Payment:{" "}
-              <span className="font-semibold">${payment.toFixed(2)}</span>
+          {/* Mortgage Calculator */}
+          <section className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Mortgage Calculator
+            </h2>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl"
+            >
+              <label className="text-sm text-gray-700">
+                Loan Amount ($)
+                <input
+                  type="number"
+                  value={loan}
+                  onChange={(e) => setLoan(Number(e.target.value))}
+                  className="mt-1 w-full border rounded px-3 py-2"
+                />
+              </label>
+
+              <label className="text-sm text-gray-700">
+                Interest Rate (%)
+                <input
+                  type="number"
+                  step="0.01"
+                  value={rate}
+                  onChange={(e) => setRate(Number(e.target.value))}
+                  className="mt-1 w-full border rounded px-3 py-2"
+                />
+              </label>
+
+              <label className="text-sm text-gray-700">
+                Loan Term (Years)
+                <input
+                  type="number"
+                  value={term}
+                  onChange={(e) => setTerm(Number(e.target.value))}
+                  className="mt-1 w-full border rounded px-3 py-2"
+                />
+              </label>
+            </form>
+
+            <div className="mt-4">
+              <button
+                onClick={calculateMortgage}
+                className="bg-orange-600 text-white px-5 py-2 rounded hover:bg-orange-700"
+              >
+                Calculate
+              </button>
             </div>
-          )}
-        </section>
-      </main>
+
+            {payment !== null && (
+              <div className="mt-4 text-sm text-gray-800">
+                Estimated Monthly Payment:{" "}
+                <span className="font-semibold">${payment.toFixed(2)}</span>
+              </div>
+            )}
+          </section>
+        </main>
+      </div>
     </div>
   );
 }
