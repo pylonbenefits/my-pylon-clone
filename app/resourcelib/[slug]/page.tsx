@@ -1,29 +1,30 @@
+// app/resourcelib/[slug]/page.tsx
+
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { blogPosts } from "../posts";
 import Sidebar from "@/components/Sidebar";
 import UserDropdown from "@/components/UserDropdown";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // adjust path as needed
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/authOptions"; // make sure this file exports properly
 
 interface PageProps {
-  params: { slug: string };
+  params: { slug: string }; // ✅ CORRECT
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/");
   }
 
+  const user = session.user;
   const post = blogPosts.find((p) => p.slug === params.slug);
 
   if (!post) {
     notFound();
   }
-
-  const user = session.user;
 
   return (
     <div className="min-h-screen bg-gray-50 font-prompt flex">
@@ -53,7 +54,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             Back to Resource Library
           </Link>
 
-          <UserDropdown firstName={user?.name ?? "User"} />
+          <UserDropdown firstName={session.user?.name ?? "User"} />
         </div>
 
         <h1 className="text-3xl font-semibold text-gray-800 mt-4 mb-6">{post.title}</h1>

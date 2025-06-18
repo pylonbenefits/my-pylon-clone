@@ -7,8 +7,15 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
+interface SignupRequestBody {
+  name?: string;
+  email: string;
+  password: string;
+  account: string;
+}
+
 export async function POST(request: NextRequest) {
-  let body: any;
+  let body: SignupRequestBody;
 
   const contentType = request.headers.get("content-type") || "";
   if (!contentType.includes("application/json")) {

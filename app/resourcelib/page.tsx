@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/authOptions";
 import Link from "next/link";
-
+import { blogPosts } from "./posts";
 import Image from "next/image";
 import {
   Home,
