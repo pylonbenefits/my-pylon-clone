@@ -1,12 +1,53 @@
 export const blogPosts2 = [
   {
-    slug: "fixed-vs-adjustable",
-    title: "Understanding Fixed vs. Adjustable Rate Mortgages",
-    content: `
+  slug: "fixed-vs-adjustable",
+  title: "Understanding Fixed vs. Adjustable Rate Mortgages",
+  content: `
 <h2 class="text-3xl font-semibold mt-8 mb-6">Fixed-Rate Mortgages</h2>
 <p class="mb-6 leading-relaxed">Fixed-rate mortgages lock in your interest rate for the entire loan term, usually 15 or 30 years. This provides predictable monthly payments, making budgeting easier.</p>
 
-<img src="/images/fixed-rate-chart.png" alt="Fixed Rate Mortgage Chart" class="w-full max-w-4xl my-6 rounded-md shadow-md" />
+<table class="w-full max-w-4xl mx-auto mb-8 border border-gray-300 rounded-md text-left text-sm shadow-sm">
+  <thead class="bg-orange-100 text-orange-800 font-semibold">
+    <tr>
+      <th class="p-3 border-b border-orange-300">Feature</th>
+      <th class="p-3 border-b border-orange-300">Description</th>
+      <th class="p-3 border-b border-orange-300">Benefit</th>
+      <th class="p-3 border-b border-orange-300">Considerations</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white text-gray-700">
+    <tr class="border-b border-gray-200">
+      <td class="p-3">Interest Rate</td>
+      <td class="p-3">Fixed and locked for the entire loan term (e.g., 15 or 30 years)</td>
+      <td class="p-3">Predictable monthly payments and budgeting stability</td>
+      <td class="p-3">Typically higher initial rates than ARMs</td>
+    </tr>
+    <tr class="border-b border-gray-200">
+      <td class="p-3">Monthly Payments</td>
+      <td class="p-3">Remain constant over the life of the loan</td>
+      <td class="p-3">Financial planning is easier with no surprises</td>
+      <td class="p-3">Less flexibility if interest rates fall</td>
+    </tr>
+    <tr class="border-b border-gray-200">
+      <td class="p-3">Loan Terms</td>
+      <td class="p-3">Commonly 15 or 30 years</td>
+      <td class="p-3">Choose term based on affordability and goals</td>
+      <td class="p-3">Longer terms mean more interest paid over time</td>
+    </tr>
+    <tr class="border-b border-gray-200">
+      <td class="p-3">Refinancing</td>
+      <td class="p-3">Possible if rates drop or needs change</td>
+      <td class="p-3">Can lower monthly payments or shorten term</td>
+      <td class="p-3">Refinancing fees and qualification requirements apply</td>
+    </tr>
+    <tr>
+      <td class="p-3">Suitability</td>
+      <td class="p-3">Best for long-term homeowners seeking stability</td>
+      <td class="p-3">Peace of mind and financial predictability</td>
+      <td class="p-3">May pay more upfront compared to adjustable options</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 class="text-3xl font-semibold mt-12 mb-6">Adjustable-Rate Mortgages (ARMs)</h2>
 <p class="mb-6 leading-relaxed">ARMs typically start with a lower initial interest rate that adjusts periodically based on market indexes after a fixed period, such as 5 or 7 years.</p>
@@ -24,7 +65,8 @@ export const blogPosts2 = [
 <h3 class="text-xl font-semibold mt-10 mb-4">Learn More</h3>
 <p class="mb-8 leading-relaxed">Check out this <a href="https://www.consumerfinance.gov/owning-a-home/mortgages/fixed-vs-adjustable-rate/" target="_blank" rel="noopener noreferrer" class="text-orange-600 hover:underline font-medium">CFPB guide on Fixed vs. Adjustable Rate Mortgages</a>.</p>
 `,
-  },
+},
+
 
   {
     slug: "first-time-buyer-tips",
