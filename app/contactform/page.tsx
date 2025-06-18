@@ -16,6 +16,8 @@ export default function FormPage() {
   };
 
   return (
+    <>
+         <Navbar />
     <main className="min-h-screen bg-white text-black font-prompt px-8 py-20">
       <h1 className="text-3xl font-bold mb-6">Request Pylon at your company</h1>
       <form onSubmit={handleSubmit} className="max-w-md space-y-4">
@@ -43,5 +45,7 @@ export default function FormPage() {
         </button>
       </form>
     </main>
+      <Footer />
+    </>
   );
 }

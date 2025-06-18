@@ -48,7 +48,7 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
           account: "employee",
         });
       }
-    } catch (error) {
+    } catch {
       setErrorMsg("Network error");
     }
 

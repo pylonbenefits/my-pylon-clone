@@ -41,7 +41,7 @@ export default function Home() {
               Attract and retain talent
             </p>
             <p className="text-base leading-relaxed">
-              Offering mortgage assistance benefits helps attract top talent and retain valuable employees. We partner with lenders to ensure the best match - and we'll handle all of the paperwork.
+              Offering mortgage assistance benefits helps attract top talent and retain valuable employees. We partner with lenders to ensure the best match - and we&apos;ll handle all of the paperwork.
             </p>
           </div>
         </div>
