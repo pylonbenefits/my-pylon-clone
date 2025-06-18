@@ -1,67 +1,57 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
+import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { compare } from "bcryptjs";
+import bcrypt from "bcryptjs";
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
-const prisma = globalForPrisma.prisma || new PrismaClient();
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+const prisma = new PrismaClient();
 
-// Optionally specify runtime (Node.js because Prisma needs node environment)
-export const runtime = "nodejs";
+export async function POST(request: NextRequest) {
+  try {
+    const { name, email, password, account } = await request.json();
 
-const handler = NextAuth({
-  session: {
-    strategy: "jwt",
-  },
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "email@example.com" },
-        password: { label: "Password", type: "password" },
+    // Validate required fields
+    if (!email || !password || !account) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "Email already in use" },
+        { status: 409 }
+      );
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user, name can be null if empty
+    const user = await prisma.user.create({
+      data: {
+        name: name?.trim() === "" ? null : name,
+        email,
+        password: hashedPassword,
+        account,
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+    });
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (user && user.password) {
-          const isValid = await compare(credentials.password, user.password);
-          if (isValid) {
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-            };
-          }
-        }
-        return null;
-      },
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.user = user;
-      return token;
-    },
-    async session({ session, token }) {
-      if (token.user) {
-        session.user = token.user as typeof token.user;
-      }
-      return session;
-    },
-  },
-  pages: {
-    signIn: "/login",
-  },
-});
-
-export { handler as GET, handler as POST };
+    return NextResponse.json(
+      { message: "User created successfully", userId: user.id },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Signup error:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}

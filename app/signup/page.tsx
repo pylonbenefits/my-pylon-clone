@@ -11,16 +11,19 @@ export default function SignupPage() {
     name: "",
     email: "",
     password: "",
-    account: "employee", // default account type, corresponds to role
+    account: "employee", // default account type
   });
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
+  // Update form data on input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // Update account type on radio change
   const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, account: e.target.value }));
   };
@@ -50,13 +53,16 @@ export default function SignupPage() {
           password: "",
           account: "employee",
         });
-        // Optionally redirect after signup
+
+        // Redirect to login page after short delay
         setTimeout(() => {
           router.push("/login");
         }, 1500);
       }
-    } catch {
-      setErrorMsg("Network error");
+    } catch (error) {
+      // Log the error for debugging
+      console.error("Signup error:", error);
+      setErrorMsg("Network error. Please try again.");
     }
 
     setLoading(false);
@@ -89,6 +95,7 @@ export default function SignupPage() {
             value={formData.name}
             onChange={handleChange}
             required
+            autoComplete="name"
           />
 
           <input
@@ -99,6 +106,7 @@ export default function SignupPage() {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="email"
           />
 
           <input
@@ -109,6 +117,7 @@ export default function SignupPage() {
             value={formData.password}
             onChange={handleChange}
             required
+            autoComplete="new-password"
           />
 
           <div className="space-y-2 mt-4">
@@ -153,7 +162,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-orange-600 text-white py-3 rounded hover:bg-orange-700 transition"
+            className="w-full bg-orange-600 text-white py-3 rounded hover:bg-orange-700 transition disabled:opacity-50"
           >
             {loading ? "Signing up..." : "Sign Up"}
           </button>
