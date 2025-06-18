@@ -1,36 +1,29 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { blogPosts } from "../posts";
 import Sidebar from "@/components/Sidebar";
 import UserDropdown from "@/components/UserDropdown";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // adjust path as needed
 
 interface PageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-interface User {
-  name: string;
-}
-
-// Simulate server-side user fetch
-async function getUser(): Promise<User> {
-  // Replace with actual server-side user fetching/auth logic
-  return { name: "User" };
+  params: { slug: string };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  // Await the params Promise here
-  const { slug } = await params;
+  const session = await getServerSession(authOptions);
 
-  const post = blogPosts.find((p) => p.slug === slug);
+  if (!session) {
+    redirect("/login");
+  }
+
+  const post = blogPosts.find((p) => p.slug === params.slug);
 
   if (!post) {
     notFound();
   }
 
-  const user = await getUser();
+  const user = session.user;
 
   return (
     <div className="min-h-screen bg-gray-50 font-prompt flex">
@@ -60,8 +53,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             Back to Resource Library
           </Link>
 
-          {/* Client component handles dropdown, state, hooks */}
-          <UserDropdown firstName={user.name} />
+          <UserDropdown firstName={user?.name ?? "User"} />
         </div>
 
         <h1 className="text-3xl font-semibold text-gray-800 mt-4 mb-6">{post.title}</h1>

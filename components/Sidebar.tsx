@@ -25,7 +25,7 @@ export default function Sidebar() {
       </Link>
       <nav className="flex flex-col gap-2 text-gray-700">
         <Link
-          href="/dashboard"
+          href="/logindashboard"
           className="flex items-start gap-2 text-lg rounded-lg px-5 py-3 hover:bg-orange-100 hover:text-orange-700 transition"
         >
           <Home size={28} />

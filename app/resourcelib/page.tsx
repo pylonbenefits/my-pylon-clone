@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Sidebar from "@/components/Sidebar"; // adjust the path as needed
 import Link from "next/link";
+
 import Image from "next/image";
-import { Menu } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  User,
+  Users,
+  LogOut,
+  Menu,
+} from "lucide-react";
 
 const blogPosts = [
   {
@@ -40,6 +47,10 @@ const blogPosts = [
 ];
 
 export default function ResourceLibraryPage() {
+  const handleLogout = () => {
+    console.log("Logout clicked");
+  };
+
   const [loan, setLoan] = useState(400000);
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
@@ -65,7 +76,37 @@ export default function ResourceLibraryPage() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-50 font-prompt">
       {/* Sidebar */}
-      <Sidebar />
+      <aside className="w-full md:w-64 bg-white shadow-md p-6 hidden md:block">
+        <Link href="/" className="block mb-8">
+          <Image
+            src="/pylontextlogo.png"
+            alt="Pylon Logo"
+            width={160}
+            height={40}
+            priority
+          />
+        </Link>
+        <nav className="space-y-4">
+          <Link href="/dashboard" className="flex items-center gap-3 text-gray-700 hover:text-orange-600">
+            <Home size={20} /> Home
+          </Link>
+          <Link href="/resourcelib" className="flex items-center gap-3 text-gray-700 hover:text-orange-600">
+            <BookOpen size={20} /> Resource Library
+          </Link>
+          <Link href="/account" className="flex items-center gap-3 text-gray-700 hover:text-orange-600">
+            <User size={20} /> My Account
+          </Link>
+          <Link href="/partners" className="flex items-center gap-3 text-gray-700 hover:text-orange-600">
+            <Users size={20} /> Partners
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-gray-700 hover:text-orange-600 w-full text-left"
+          >
+            <LogOut size={20} /> Logout
+          </button>
+        </nav>
+      </aside>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col">

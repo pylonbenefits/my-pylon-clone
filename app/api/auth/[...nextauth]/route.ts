@@ -1,57 +1,53 @@
-import { NextRequest, NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import { compare } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: NextRequest) {
-  try {
-    const { name, email, password, account } = await request.json();
-
-    // Validate required fields
-    if (!email || !password || !account) {
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        { message: "Email already in use" },
-        { status: 409 }
-      );
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user, name can be null if empty
-    const user = await prisma.user.create({
-      data: {
-        name: name?.trim() === "" ? null : name,
-        email,
-        password: hashedPassword,
-        account,
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
-    });
+      async authorize(credentials) {
+        const user = await prisma.user.findUnique({
+          where: { email: credentials?.email },
+        });
 
-    return NextResponse.json(
-      { message: "User created successfully", userId: user.id },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Signup error:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-}
+        if (!user || !user.password) return null;
+
+        const isValid = await compare(credentials.password, user.password);
+        if (!isValid) return null;
+
+        return { id: user.id, name: user.name, email: user.email };
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
+  ],
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async session({ session, token }) {
+      session.user = token.user as any;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) token.user = user;
+      return token;
+    },
+  },
+});
+
+export { handler as GET, handler as POST };

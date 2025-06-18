@@ -11,19 +11,17 @@ export default function SignupPage() {
     name: "",
     email: "",
     password: "",
-    account: "employee", // default account type
+    account: "employee",
   });
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Update form data on input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Update account type on radio change
   const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, account: e.target.value }));
   };
@@ -46,7 +44,7 @@ export default function SignupPage() {
       if (!res.ok) {
         setErrorMsg(data.message || "Something went wrong");
       } else {
-        setSuccessMsg("Signup successful! Redirecting to login...");
+        setSuccessMsg("Signup successful! Redirecting...");
         setFormData({
           name: "",
           email: "",
@@ -54,13 +52,14 @@ export default function SignupPage() {
           account: "employee",
         });
 
-        // Redirect to login page after short delay
-        setTimeout(() => {
-          router.push("/login");
-        }, 1500);
+        // Redirect using value from server
+        if (data.redirect) {
+          setTimeout(() => {
+            router.push(data.redirect);
+          }, 1000);
+        }
       }
     } catch (error) {
-      // Log the error for debugging
       console.error("Signup error:", error);
       setErrorMsg("Network error. Please try again.");
     }
@@ -172,7 +171,7 @@ export default function SignupPage() {
           Already a member?{" "}
           <button
             type="button"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/logindashboard")}
             className="text-orange-600 hover:underline"
           >
             Log in here

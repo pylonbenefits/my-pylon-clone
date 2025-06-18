@@ -32,7 +32,7 @@ export default function DashboardPage() {
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col md:ml-64">
+      <div className="flex-1 flex flex-col md:ml-10">
         <main className="flex-1 p-6">
           {/* Mobile header with logo and menu button */}
           <header className="flex items-center justify-between mb-8 md:hidden">
