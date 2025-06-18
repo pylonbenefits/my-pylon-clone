@@ -1,29 +1,23 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 import { compare } from "bcryptjs";
 
-import GoogleProvider from "next-auth/providers/google";
-
-export default NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-  pages: {
-    signIn: "/login", // custom login page if applicable
-  },
-});
-
-const prisma = new PrismaClient();
+// Avoid creating multiple PrismaClient instances in dev
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+const prisma = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -37,10 +31,15 @@ const handler = NextAuth({
           where: { email: credentials.email },
         });
 
-        if (user) {
+        if (user && user.password) {
           const isValid = await compare(credentials.password, user.password);
-          if (!isValid) return null;
-          return { id: user.id, email: user.email, name: user.name };
+          if (isValid) {
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+            };
+          }
         }
 
         return null;
@@ -53,7 +52,9 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (token.user) session.user = token.user as User;
+      if (token.user) {
+        session.user = token.user as typeof token.user;
+      }
       return session;
     },
   },
