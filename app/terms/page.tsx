@@ -77,7 +77,7 @@ const TermsofService = () => {
         1. Our Services
       </h2>
       <p style={{ marginBottom: "1.5rem" }}>
-        Pylon provides digital services by partnering with your employer (the &quot;Employer&quot; or &quot;your Employer&quot;) to make these services available to you. Depending on your Employer&apos;s agreement with us, you will be able to access services provided by our third-party service providers (&quot;Partners&quot;). Our service connects you with our Partners' services only, which may include mortgage and refinancing services, and any other services offered to you without our involvement. We act as a referral and facilitation Service only.
+        Pylon provides digital services by partnering with your employer (the &quot;Employer&quot; or &quot;your Employer&quot;) to make these services available to you. Depending on your Employer&apos;s agreement with us, you will be able to access services provided by our third-party service providers (&quot;Partners&quot;). Our service connects you with our Partners&apos; services only, which may include mortgage and refinancing services, and any other services offered to you without our involvement. We act as a referral and facilitation Service only.
       </p>
 
       <h3 id="eligibility" style={{ fontSize: "1.25rem", fontWeight: "700", marginBottom: "1rem" }}>
@@ -180,7 +180,7 @@ const TermsofService = () => {
   5. Indemnity
 </h2>
 <p style={{ marginBottom: "2rem" }}>
-  You agree to indemnify, defend, and hold harmless Pylon, its affiliates, officers, directors, employees, agents, and partners from any claims, liabilities, damages, losses, costs, and expenses (including, without limitation, reasonable attorneys' and accounting fees) arising from (i) your violation of this Agreement or any applicable laws; (ii) your use or misuse of the Platform, Services, or Content; (iii) your infringement of any intellectual property, privacy, or other rights of a third party; (iv) any disputes between you and a third party, including our Partners; and (v) any dispute between you and your Employer. Pylon reserves the right to assume exclusive defense and control of any matter subject to indemnification by you, and you agree to cooperate with Pylon&apos;s defense. You shall not settle any such claim without our prior written consent. This indemnification obligation will survive the termination of this Agreement and your use of the Platform and Services.
+  You agree to indemnify, defend, and hold harmless Pylon, its affiliates, officers, directors, employees, agents, and partners from any claims, liabilities, damages, losses, costs, and expenses (including, without limitation, reasonable attorneys&apos; and accounting fees) arising from (i) your violation of this Agreement or any applicable laws; (ii) your use or misuse of the Platform, Services, or Content; (iii) your infringement of any intellectual property, privacy, or other rights of a third party; (iv) any disputes between you and a third party, including our Partners; and (v) any dispute between you and your Employer. Pylon reserves the right to assume exclusive defense and control of any matter subject to indemnification by you, and you agree to cooperate with Pylon&apos;s defense. You shall not settle any such claim without our prior written consent. This indemnification obligation will survive the termination of this Agreement and your use of the Platform and Services.
 </p>
 
 
