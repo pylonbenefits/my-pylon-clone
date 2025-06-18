@@ -2,8 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
+export default function SignupPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,13 +43,17 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
       if (!res.ok) {
         setErrorMsg(data.message || "Something went wrong");
       } else {
-        setSuccessMsg("Signup successful! Please log in.");
+        setSuccessMsg("Signup successful! Redirecting to login...");
         setFormData({
           name: "",
           email: "",
           password: "",
           account: "employee",
         });
+        // Optionally redirect after signup
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
       }
     } catch {
       setErrorMsg("Network error");
@@ -156,7 +163,7 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
           Already a member?{" "}
           <button
             type="button"
-            onClick={onOpenLogin}
+            onClick={() => router.push("/login")}
             className="text-orange-600 hover:underline"
           >
             Log in here
@@ -165,6 +172,4 @@ const Signup = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
       </div>
     </div>
   );
-};
-
-export default Signup;
+}

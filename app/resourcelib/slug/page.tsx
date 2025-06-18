@@ -1,53 +1,36 @@
-
-
-import React, { useEffect, useRef, useState } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { blogPosts } from "../posts";
-import { UserCircle, ChevronDown, ChevronUp } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import UserDropdown from "@/components/UserDropdown";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function BlogPostPage({ params }: PageProps) {
-  const post = blogPosts.find((p) => p.slug === params.slug);
+interface User {
+  name: string;
+}
+
+// Simulate server-side user fetch
+async function getUser(): Promise<User> {
+  // Replace with actual server-side user fetching/auth logic
+  return { name: "User" };
+}
+
+export default async function BlogPostPage({ params }: PageProps) {
+  // Await the params Promise here
+  const { slug } = await params;
+
+  const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
     notFound();
   }
 
-  // Mock user data — replace with your auth/user fetching logic
-  const [user, setUser] = useState<{ name: string } | null>(null);
-
-  useEffect(() => {
-    // Simulate fetching logged-in user info
-    const fetchUser = async () => {
-      // Replace with your actual auth call
-      const loggedInUser = { name: "Kelly" };
-      setUser(loggedInUser);
-    };
-    fetchUser();
-  }, []);
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const user = await getUser();
 
   return (
     <div className="min-h-screen bg-gray-50 font-prompt flex">
@@ -60,6 +43,7 @@ export default function BlogPostPage({ params }: PageProps) {
           <Link
             href="/resourcelib"
             className="flex items-center gap-1 text-orange-600 hover:underline text-sm font-medium"
+            aria-label="Back to Resource Library"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -68,50 +52,19 @@ export default function BlogPostPage({ params }: PageProps) {
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2}
+              aria-hidden="true"
+              focusable="false"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
             Back to Resource Library
           </Link>
 
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 text-gray-700 hover:text-orange-600 font-medium"
-            >
-              <UserCircle size={28} />
-              <span>{user ? user.name : "Loading..."}</span>
-              {dropdownOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-200">
-                <Link
-                  href="/account"
-                  className="block px-4 py-2 text-gray-700 hover:bg-orange-100 hover:text-orange-700"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  Account Settings
-                </Link>
-                <Link
-                  href="/api/auth/signout"
-                  className="block px-4 py-2 text-gray-700 hover:bg-orange-100 hover:text-orange-700"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  Logout
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Client component handles dropdown, state, hooks */}
+          <UserDropdown firstName={user.name} />
         </div>
 
-        <h1 className="text-3xl font-semibold text-gray-800 mt-4 mb-6">
-          {post.title}
-        </h1>
+        <h1 className="text-3xl font-semibold text-gray-800 mt-4 mb-6">{post.title}</h1>
 
         <article
           className="prose prose-orange max-w-none text-gray-700 text-lg"

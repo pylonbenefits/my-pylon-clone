@@ -13,7 +13,7 @@ async function main() {
       email: "test@example.com",
       name: "Test User",
       password: hashedPassword,
-      accounttype: "test",
+      account: "test",
     },
   });
 
