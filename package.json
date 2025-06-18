@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
 
-  //"start": "CHOKIDAR_USEPOLLING=true react-scripts start",
+
 "scripts": {
   "dev": "next dev",
   "build": "next build",
